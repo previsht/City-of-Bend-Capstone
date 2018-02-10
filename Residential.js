@@ -76,7 +76,7 @@ function run() {
     }
     if (document.getElementById("state").checked === true) {
       var costWatt = document.getElementById("statePercent").value;
-      var subCost = costWatt * (sumGen*0.114155);
+      var subCost = costWatt * 4560;
       if (subCost <6000){
       	state = subCost;
       }
@@ -93,7 +93,7 @@ function run() {
   }
   if (document.getElementById("utility").checked === true) {
     var costWattU = document.getElementById("utilityFlat").value;
-      var subCostU = costWattU * (sumGen*0.114155);
+      var subCostU = costWattU * 4560;
       if (subCostU <4400){
       	utility = subCostU;
       }
