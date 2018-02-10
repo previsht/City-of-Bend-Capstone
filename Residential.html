@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cost+Savings code</title>
+    <link rel="stylesheet" type="text/css" href="Residential.css">
+    <script type="text/javascript" src="Residential.js"></script>
+  </head>
+
+  <body>
+    <p> Price per Panel ($):</p>
+    $
+    <input type="number" id="panelCost" value="230">
+    <br>
+    <input type="radio" name="storageOption" value="none" checked onclick="storageQuery()"> No Storage Option
+    <br>
+    <input type="radio" name="storageOption" value="backup" onclick="storageQuery()"> Battery Backup
+    <br>
+    <input type="radio" name="storageOption" value="netZero" onclick="storageQuery()"> Net Zero Battery
+    <br>
+    <p> Cost per battery ($):</p>
+    $
+    <input type="number" id="batteryCost" value="0">
+    <p> Number of Batteries:</p>
+    <input type="number" id="numberBatteries" value="0" readonly>
+    <p> Cost per kWh ($):</p>
+    $
+    <input type="number" id="energyCost" value="0.1047">
+    <br>
+    <br> For Profit?
+    <br>
+    <input type="radio" name="profit" id="taxed" checked onclick="profitQuery()"> Yes
+    <input type="radio" name="profit" id="notTaxed" onclick="profitQuery()"> No
+    <br>
+    <input type="checkbox" id="itc"> ITC: % of total discounted:
+    <input type="number" id="itcPercent" value="30">%
+    <br>
+    <input type="checkbox" id="state"> State: $/Watt
+    <input type="number" id="statePercent" value="1.3">
+    <br>
+    <input type="checkbox" id="macrs" hidden>
+    <br>
+    <input type="checkbox" id="utility"> Utility: Flat fee discounted: $
+    <input type="number" id="utilityFlat" value="0">
+    <br>
+    <input type="checkbox" id="percent"> Misc: % of total discounted:
+    <input type="number" id="miscPercent" value="0">%
+    <br>
+    <input type="checkbox" id="flat">Misc: Flat fee discounted: $
+    <input type="number" id="miscFlat" value="0">
+
+    <p> Discount Rate:</p>
+    <input type="number" id="discountRate" value="10">%
+    <br>
+    <br>
+    <button onclick="run()">Run</button>
+    <br>
+    <br> Utility Bill Offset
+    <br>
+    <table style="width:50%">
+      <tr>
+        <th>Month</th>
+        <th>Savings</th>
+      </tr>
+      <tr>
+        <td>January</td>
+        <td id="jan">$</td>
+      </tr>
+      <tr>
+        <td>Febuary</td>
+        <td id="feb">$</td>
+      </tr>
+      <tr>
+        <td>March</td>
+        <td id="mar">$</td>
+      </tr>
+      <tr>
+        <td>April</td>
+        <td id="apr">$</td>
+      </tr>
+      <tr>
+        <td>May</td>
+        <td id="may">$</td>
+      </tr>
+      <tr>
+        <td>June</td>
+        <td id="jun">$</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td id="jul">$</td>
+      </tr>
+      <tr>
+        <td>August</td>
+        <td id="aug">$</td>
+      </tr>
+      <tr>
+        <td>September</td>
+        <td id="sep">$</td>
+      </tr>
+      <tr>
+        <td>October</td>
+        <td id="oct">$</td>
+      </tr>
+      <tr>
+        <td>November</td>
+        <td id="nov">$</td>
+      </tr>
+      <tr>
+        <td>December</td>
+        <td id="dec">$</td>
+      </tr>
+    </table>
+    <br> Yearly Savings:
+    <br> $
+    <textarea id='outSave' cols="6" rows="1" readonly></textarea>
+    <br> ROI:
+    <br>
+    <textarea id='outROI' cols="7" rows="1" readonly></textarea> %
+    <br> NPV
+    <br>$
+    <textarea id='outPay' cols="9" rows="1" readonly></textarea>
+    <br> CO2 Offset
+    <br>
+    <textarea id='outCO2' cols="6" rows="1" readonly></textarea> metric tons of CO2 offset each year.
+    <IMG SRC="http://media3.giphy.com/media/SnBaZPL1Tjnfa/giphy.gif"></IMG>
+
+  </body>
+
+</html>
