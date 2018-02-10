@@ -1,6 +1,5 @@
 function run() {
   // System Information & loose variables
-  //var loadProfile = [935, 804, 807, 719, 689, 601, 651, 594, 656, 746, 810, 907];
   //alert(loadProfile.reduce(getSum))
   //Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.
   //numbers are in kilowatt hours per month
@@ -15,7 +14,7 @@ function run() {
   var generation, numberOfPanels, installationCosts, inverterReplacement, i;
   switch (getCheckedRadioValue("storageOption")) {
     case "none":
-      generation = [413.6, 411.20, 639.70, 664.00, 787.90, 773.10, 849.9, 801.70, 693.3, 601.00, 388.60, 387.60];
+      generation = [6426, 8017, 12661, 14026, 15994, 16243, 17965, 17123, 15781, 10663, 5639, 4799];
       numberOfPanels = 16;
       installationCosts = 10090.40;
       inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -24,12 +23,12 @@ function run() {
       generation = [413.6, 411.20, 639.70, 664.00, 787.90, 773.10, 849.9, 801.70, 693.3, 601.00, 388.60, 387.60];
         //Warranty good for 5 years
       batteryCosts[0] = totalBatteryCost;
-      batteryCosts[4] = totalBatteryCost;
-      batteryCosts[9] = totalBatteryCost;
-      batteryCosts[14] = totalBatteryCost;
+      batteryCosts[6] = totalBatteryCost;
+      batteryCosts[11] = totalBatteryCost;
+      batteryCosts[16] = totalBatteryCost;
       numberOfPanels = 16;
       installationCosts = +10090.40 + 355.97 + 249;
-      inverterReplacement = [0, 0, 0, 0, 248, 0, 0, 0, 0, 2248, 0, 0, 0, 0,248, 0, 0, 0, 0, 0];
+      inverterReplacement = [0, 0, 0, 0, 5304.50, 0, 0, 0, 0, 7304.5, 0, 0, 0, 0, 5304.50, 0, 0, 0, 0, 0];
 
       break;
     case "netZero":
@@ -40,7 +39,7 @@ function run() {
       batteryCosts[11] = totalBatteryCost;
       numberOfPanels = 52;
       installationCosts = +34327 + 295;
-      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 4785, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 47115.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
       break;
   }
@@ -92,7 +91,7 @@ function run() {
 
   }
   if (document.getElementById("utility").checked === true) {
-    var costWattU = document.getElementById("utilityFlat").value;
+   var costWattU = document.getElementById("utilityFlat").value;
       var subCostU = costWattU * (sumGen*0.114155);
       if (subCostU <4400){
       	utility = subCostU;
@@ -115,6 +114,7 @@ function run() {
   var totalCost = (panelCost * numberOfPanels) + installationCosts;
   var incentiveSavings = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   incentiveSavings[0] =+ (totalCost * (itc / 100)) + state + utility + parseFloat(flat) + (totalCost * (percent / 100));
+  //alert(incentiveSavings)
   var systemLength = 19; //20 years starting at zero
   var yearlyGeneration = generation.reduce(getSum); //sum of generation array
   var generationArray = [];
@@ -194,7 +194,7 @@ function profitQuery() {
     document.getElementById("state").hidden = false;
     document.getElementById("statePercent").value = 1.3;
     document.getElementById("statePercent").readOnly = false;
-    document.getElementById("macrs").hidden = true;//false
+    document.getElementById("macrs").hidden = false;
 
   } else if (document.getElementById("taxed").checked === false) {
     document.getElementById("itc").hidden = true;
