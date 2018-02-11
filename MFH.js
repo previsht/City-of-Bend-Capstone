@@ -5,44 +5,14 @@ function run() {
   //numbers are in kilowatt hours per month
   var itcMacrsOffset = 1;
   var macrs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  var batteryCosts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //Is an array of zeroes the length of systemLife
+  //var batteryCosts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //Is an array of zeroes the length of systemLife
   var panelEfficiancyLosses = [0, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015]; //Is an array the length of systemLife
   //pull battery costs
-  var batteryCost = document.getElementById("batteryCost").value;
-  var numberOfBatteries = document.getElementById("numberBatteries").value;
-  var totalBatteryCost = batteryCost * numberOfBatteries;
-  var generation, numberOfPanels, installationCosts, inverterReplacement, i;
-  switch (getCheckedRadioValue("storageOption")) {
-    case "none":
+    var generation, numberOfPanels, installationCosts, inverterReplacement, i;
       generation = [6426, 8017, 12661, 14026, 15994, 16243, 17965, 17123, 15781, 10663, 5639, 4799];
-      numberOfPanels = 16;
-      installationCosts = 10090.40;
-      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      break;
-    case "backup":
-      generation = [413.6, 411.20, 639.70, 664.00, 787.90, 773.10, 849.9, 801.70, 693.3, 601.00, 388.60, 387.60];
-        //Warranty good for 5 years
-      batteryCosts[0] = totalBatteryCost;
-      batteryCosts[6] = totalBatteryCost;
-      batteryCosts[11] = totalBatteryCost;
-      batteryCosts[16] = totalBatteryCost;
-      numberOfPanels = 16;
-      installationCosts = +10090.40 + 355.97 + 249;
-      inverterReplacement = [0, 0, 0, 0, 5304.50, 0, 0, 0, 0, 7304.5, 0, 0, 0, 0, 5304.50, 0, 0, 0, 0, 0];
-
-      break;
-    case "netZero":
-      generation = [935, 804, 807, 719, 689, 601, 651, 594, 656, 746, 810, 907];
-      //var production = [1339.6, 1330.30, 2072.00, 2139.5, 2558.3, 2498.6, 2751.5, 2597, 2243.7, 1940.8, 1252.6, 1255.4];
-        //Warranty good for 10 years
-      batteryCosts[0] = totalBatteryCost;
-      batteryCosts[11] = totalBatteryCost;
-      numberOfPanels = 52;
-      installationCosts = +34327 + 295;
-      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 47115.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-      break;
-  }
+      numberOfPanels = 321;
+      installationCosts = 105225;
+      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 21456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   //Read in Power Cost and generation
   var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
   var costPerKWh = document.getElementById("energyCost").value;
@@ -75,7 +45,7 @@ function run() {
     }
     if (document.getElementById("state").checked === true) {
       var costWatt = document.getElementById("statePercent").value;
-      var subCost = costWatt * (sumGen*0.114155);
+      var subCost = costWatt * 91450;
       if (subCost <6000){
       	state = subCost;
       }
@@ -92,12 +62,12 @@ function run() {
   }
   if (document.getElementById("utility").checked === true) {
    var costWattU = document.getElementById("utilityFlat").value;
-      var subCostU = costWattU * (sumGen*0.114155);
-      if (subCostU <4400){
+      var subCostU = costWattU * 91450;
+      if (subCostU <40000){
       	utility = subCostU;
       }
       else {
-      	utility = 4400;
+      	utility = 40000;
       }
   }
   if (document.getElementById("percent").checked === true) {
@@ -131,6 +101,7 @@ function run() {
   // Determining present value
   var discountRate = document.getElementById("discountRate").value / 100;
   var cumulativeCF = [];
+  var npvSavings=0;
   cumulativeCF[0] = -totalCost;
   var npvCost = [];
   npvCost = totalCost;
@@ -140,12 +111,14 @@ function run() {
   for (var n = 0; n < 20; n++) {
     // Present value factor
     pVF = 1 / Math.pow(1 + discountRate, n + 1);
-    cumulativeCF[n + 1] = +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - ((batteryCosts[n]) * pVF) - (inverterReplacement[n] * pVF);
+    cumulativeCF[n + 1] = +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - (inverterReplacement[n] * pVF);
     //discountCF = ((yearlySavings[n] + macrsSavings[n] - batteryCosts[n]) * pVF)
-    npvCost = +npvCost + (batteryCosts[n] * pVF) + (inverterReplacement[n] * pVF);
+    npvSavings =+ npvSavings +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF)
+    npvCost = +npvCost + (inverterReplacement[n] * pVF);
     k = cumulativeCF.reduce(getSum);
   }
   //alert(totalCost+totalBatteryCost)
+  //alert(npvSavings)
   //alert(npvCost)
   // ROI & NPV
   var returnOnInvestment = (cumulativeCF.reduce(getSum) / (npvCost)) * 100;
