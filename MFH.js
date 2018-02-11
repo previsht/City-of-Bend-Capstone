@@ -11,7 +11,7 @@ function run() {
     var generation, numberOfPanels, installationCosts, inverterReplacement, i;
       generation = [6426, 8017, 12661, 14026, 15994, 16243, 17965, 17123, 15781, 10663, 5639, 4799];
       numberOfPanels = 321;
-      installationCosts = 105225;
+      installationCosts = 122895;
       inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 21456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   //Read in Power Cost and generation
   var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
