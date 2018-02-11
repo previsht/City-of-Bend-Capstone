@@ -165,7 +165,7 @@ function profitQuery() {
     document.getElementById("itcPercent").value = 30;
     document.getElementById("itcPercent").readOnly = false;
     document.getElementById("state").hidden = false;
-    document.getElementById("statePercent").value = 1.3;
+    document.getElementById("statePercent").value = 0;
     document.getElementById("statePercent").readOnly = false;
     document.getElementById("macrs").hidden = false;
 
