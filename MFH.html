@@ -15,17 +15,6 @@
     $
     <input type="number" id="panelCost" value="230">
     <br>
-    <input type="radio" name="storageOption" value="none" checked onclick="storageQuery()"> No Storage Option
-    <br>
-    <input type="radio" name="storageOption" value="backup" onclick="storageQuery()"> Battery Backup
-    <br>
-    <input type="radio" name="storageOption" value="netZero" onclick="storageQuery()"> Net Zero Battery
-    <br>
-    <p> Cost per battery ($):</p>
-    $
-    <input type="number" id="batteryCost" value="0">
-    <p> Number of Batteries:</p>
-    <input type="number" id="numberBatteries" value="0" readonly>
     <p> Cost per kWh ($):</p>
     $
     <input type="number" id="energyCost" value="0.1047">
@@ -39,11 +28,11 @@
     <input type="number" id="itcPercent" value="30">%
     <br>
     <input type="checkbox" id="state"> State: $/Watt
-    <input type="number" id="statePercent" value="1.3">
+    <input type="number" id="statePercent" value="0">
     <br>
     <input type="checkbox" id="macrs">Qualifies for MACRS?<br>
     <input type="checkbox" id="utility"> Utility: $/Watt
-    <input type="number" id="utilityFlat" value="0.55">
+    <input type="number" id="utilityFlat" value="0.35">
     <br>
     <input type="checkbox" id="percent"> Misc: % of total discounted:
     <input type="number" id="miscPercent" value="0">%
