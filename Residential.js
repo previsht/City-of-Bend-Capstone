@@ -153,7 +153,7 @@ function run() {
   var nPV = cumulativeCF.reduce(getSum);
   document.getElementById("outPay").value = nPV;
   //CO2 offset
-  var co2Offset = 0.000744 * yearlyGeneration; //metric tons co2/kWh
+  var co2Offset = 0.000744 * sumGen; //metric tons co2/kWh
   document.getElementById("outCO2").value = co2Offset;
   //alert('bye')
 }
