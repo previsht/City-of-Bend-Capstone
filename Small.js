@@ -20,17 +20,16 @@ function run() {
       numberOfPanels = 62;
       installationCosts = 42555;
       inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 4500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      fixedCostsSavings = [15,15,27,21,23,21,22,29,25,17,13,14]
+      fixedCostsSavings = [15,15,27,21,23,21,22,29,25,17,13,14];
       break;
     case "TOU":
       generation = [107,117,217,216,260,250,286,295,273,174,103,99];
-        //Warranty good for 5 years
       batteryCosts[0] = totalBatteryCost;
       batteryCosts[9] = totalBatteryCost;
       numberOfPanels = 62;
       installationCosts = 42555 + 11693;
       inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 9600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-      fixedCostsSavings = [36,35,48,42,47,40,46,49,50,43,34,34]
+      fixedCostsSavings = [36,35,48,42,47,40,46,49,50,43,34,34];
       break;
     
   }
@@ -173,7 +172,7 @@ function storageQuery() {
     case "TOU":
       document.getElementById("batteryCost").value = 9610;
       document.getElementById("numberBatteries").value = 6;
-      document.getElementById("energyCost1").value = 0;
+      document.getElementById("energyCost1").value = 1;
       document.getElementById("energyCost2").value = 1;
       document.getElementById("energyCost1").hidden = true;
       document.getElementById("energyCost2").hidden = true;
