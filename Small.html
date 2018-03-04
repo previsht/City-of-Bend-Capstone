@@ -6,61 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Small Business</title>
     <link rel="stylesheet" type="text/css" href="small.css">
-    <script type="text/javascript" src="Small.js"></script>
+    <script type="text/javascript" src="small.js"></script>
   </head>
 
   <body>
-    <a href="index.html">Return to the Homepage</a>
-    <p> Price per Panel ($):</p>
+    <a href="index.html">Return to the Homepage</a><br><br>
+    <button class="accordion">System Information</button>
+<div class="panel"><br>
+     Price per Panel:
     $
-    <input type="number" id="panelCost" value="250">
-    <br>
-    <input type="radio" name="storageOption" value="none" checked onclick="storageQuery()"> No Storage Option
-    <br>
-    <input type="radio" name="storageOption" value="TOU" onclick="storageQuery()"> Time of Use
-    <br>
+    <input type="number" id="panelCost" value="230">
+    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">SolarWorld 285 mono black</span></div>
 
+    <br><input type="radio" name="storageOption" value="none" checked onclick="storageQuery()"> No Storage Option
     <br>
-    <p> Cost per battery ($):</p>
+    <input type="radio" name="storageOption" value="TOU" onclick="storageQuery()"> Time-of-Use    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Time of use pricing is a way for the utility to charge different prices for electricity during times of high energy demand. A time of use battery bank is designed to mitigate these higher prices by charging during low price times and discharging during high price times.</span></div>
+    <br>
+    <br>
+     Cost per battery ($):
     $
-    <input type="number" id="batteryCost" value="0">
-    <p> Number of Batteries:</p>
-    <input type="number" id="numberBatteries" value="0" readonly>
-    <p> Cost per kWh Tier 1($):</p>
-    $
-    <input type="number" id="energyCost1" value="0.0628">
-    <p> Cost per kWh Tier 2($):</p>
-    $
+    <input type="number" id="batteryCost" value="0">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">(Fronius 10.5 kWh solar battery). In order to input an average cost per kWh of battery storage rather than the specific battery cost, take the average cost per kwh obtained and multiply it by 10.5 . The battery used for the analysis was an 10.5 kwh battery. Using this factor allows the end user to input a average $/kWh while keeping the same system parameters. </span></div><br><br>
+     Number of Batteries: <input type="number" id="numberBatteries" value="0" readonly><br>
+</div>
+    <button class="accordion">Rate Schedule and Incentives</button>
+<div class="panel">
+     <br>Cost per kWh Tier 1: $
+    <input type="number" id="energyCost1" value="0.0628">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Effective Cost per kWh, Pacific Power Schedule 28 primary for Bend, OR.</span></div>
+    <br>Cost per kWh Tier 2:$
     <input type="number" id="energyCost2" value="0.06119">
     <br>
-    <br> For Profit?
+    <br> Eligible for Tax Incentives?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Non-profit owners of rooftop solar do not qualify for tax breaks without a PPA that is beyond the scope of this tool. Select whether or not this analysis qualifies for tax incentives, then select corresponding incentives.
+</span></div>
     <br>
     <input type="radio" name="profit" id="taxed" checked onclick="profitQuery()"> Yes
     <input type="radio" name="profit" id="notTaxed" onclick="profitQuery()"> No
     <br>
     <input type="checkbox" id="itc"> ITC: % of total discounted:
-    <input type="number" id="itcPercent" value="30">%
+    <input type="number" id="itcPercent" value="30">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Solar Investment Tax Credit (up to 30% in 2018) </span></div>
     <br>
     <input type="checkbox" id="state"> State: $/Watt
-    <input type="number" id="statePercent" value="0">
+    <input type="number" id="statePercent" value="0"> Maximum: $
+    <input type="number" id="stateMax" value="6000">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Oregon State Incentive (Default: $0/watt)</span></div>
     <br>
-    <input type="checkbox" id="macrs" > Qualifies for MACRS?<br>
+    <input type="checkbox" id="macrs" > Qualifies for MACRS?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Qualifies for 5-year MACRS?</span></div><br>
     <input type="checkbox" id="utility"> Utility: $/Watt
-    <input type="number" id="utilityFlat" value="0.375">
+    <input type="number" id="utilityFlat" value="0.375"> Maximum: $
+    <input type="number" id="utilityMax" value="40000">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Energy Trust of Oregon (Default: $0.55/watt)</span></div>
     <br>
     <input type="checkbox" id="percent"> Misc: % of total discounted:
-    <input type="number" id="miscPercent" value="0">%
+    <input type="number" id="miscPercent" value="0">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: percent of initial cost discounted</span></div>
     <br>
     <input type="checkbox" id="flat">Misc: Flat fee discounted: $
-    <input type="number" id="miscFlat" value="0">
-
-    <p> Discount Rate:</p>
-    <input type="number" id="discountRate" value="10">%
+    <input type="number" id="miscFlat" value="0">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: flat fee discounted</span></div>
+  <br></div>
+    <button class="accordion">Discount Rate and Go!</button>
+<div class="panel">
+    <br>Discount Rate:
+    <input type="number" id="discountRate" value="10">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The discount rate reflects the time value of money. To see what solar companies would show you on a solar bid, set discount rate equal to 0%. To reflect only inflation, set the the discount rate to 2.5%</span></div>
     <br>
     <br>
-    <button onclick="run()">Run</button>
+    <button onclick="run();">Go!</button>
     <br>
-    <br> Utility Bill Offset
+    </div>
+    <button class="accordion">Outputs</button>
+<div class="panel">
+    <br> Utility Bill Savings
     <br>
     <table style="width:50%">
       <tr>
@@ -116,19 +138,20 @@
         <td id="dec">$</td>
       </tr>
     </table>
-    <br> Yearly Savings:
-    <br> $
+    <br>First Year Savings: $
     <textarea id='outSave' cols="8" rows="1" readonly></textarea>
-    <br> ROI:
-    <br>
+    <br>Incentives Tax Credit Amount: $<textarea id='Tax' cols="8" rows="1" readonly></textarea>    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The amount saved through tax incentives. If the customer is not able to utilize these tax savings then the simulation should be rerun with less incentives selected.</span></div>
+    <br> Return On Investment:
     <textarea id='outROI' cols="7" rows="1" readonly></textarea> %
-    <br> NPV
-    <br>$
-    <textarea id='outPay' cols="9" rows="1" readonly></textarea>
-    <br> CO2 Offset
-    <br>
-    <textarea id='outCO2' cols="6" rows="1" readonly></textarea> metric tons of CO2 offset each year.
-    <IMG SRC="http://media3.giphy.com/media/SnBaZPL1Tjnfa/giphy.gif"></IMG>
+    <br> Net Present Value: $
+    <textarea id='outPay' cols="9" rows="1" readonly></textarea><br>
+    Payback Period (Years): <textarea id='payback' cols="20" rows="1" readonly></textarea>
+    <br> CO2 Offset: <textarea id='outCO2' cols="6" rows="1" readonly></textarea> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div>
+    <IMG SRC="http://media3.giphy.com/media/SnBaZPL1Tjnfa/giphy.gif"></IMG><div class="tooltip">&#x2754;
+  <span class="tooltiptext">A dancing Polar Bear (duh).</span></div>
+    </div>
 
   </body>
 
