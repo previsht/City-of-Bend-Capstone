@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by previsht (http://jsbin.com/fogijib/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Small Business</title>
+    <link rel="stylesheet" type="text/css" href="small.css">
+    <script type="text/javascript" src="small.js"></script>
+  <style id="jsbin-css">
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 0px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 360px;
+    background-color: grey;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 110%;
+     opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+   
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.accordion {
+    background-color: #5CDB95;
+    color: #557A95;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+.active, .accordion:hover {
+    background-color: #8EE4AF;
+}
+
+.accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: #EDF5E1;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+</style>
+</head>
+
+  <body>
+    <a href="index.html">Return to the Homepage</a><br><br>
+    <button class="accordion">System Information</button>
+<div class="panel"><br><br><br><br><br>
+     Price per Panel:
+    $
+    <input type="number" id="panelCost" value="230">
+    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">SolarWorld 285 mono black</span></div>
+
+    <br><input type="radio" name="storageOption" value="none" checked onclick="storageQuery()"> No Storage Option
+    <br>
+    <input type="radio" name="storageOption" value="TOU" onclick="storageQuery()"> Time-of-Use    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Time of use pricing is a way for the utility to charge different prices for electricity during times of high energy demand. A time of use battery bank is designed to mitigate these higher prices by charging during low price times and discharging during high price times.</span></div>
+    <br>
+    <br>
+     Cost per battery ($):
+    $
+    <input type="number" id="batteryCost" value="0">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">(Fronius 10.5 kWh solar battery). In order to input an average cost per kWh of battery storage rather than the specific battery cost, take the average cost per kwh obtained and multiply it by 10.5 . The battery used for the analysis was an 10.5 kwh battery. Using this factor allows the end user to input a average $/kWh while keeping the same system parameters. </span></div><br><br>
+     Number of Batteries: <input type="number" id="numberBatteries" value="0" readonly><br><br><br><br><br><br>
+</div>
+    <button class="accordion">Rate Schedule and Incentives</button>
+<div class="panel">
+     <br><br>Cost per kWh Tier 1: $
+    <input type="number" id="energyCost1" value="0.0628">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Effective Cost per kWh, Pacific Power Schedule 28 primary for Bend, OR.</span></div>
+    <br>Cost per kWh Tier 2:$
+    <input type="number" id="energyCost2" value="0.06119">
+    <br>
+    <br> Eligible for Tax Incentives?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Non-profit owners of rooftop solar do not qualify for tax breaks without a PPA that is beyond the scope of this tool. Select whether or not this analysis qualifies for tax incentives, then select corresponding incentives.
+</span></div>
+    <br>
+    <input type="radio" name="profit" id="taxed" checked onclick="profitQuery()"> Yes
+    <input type="radio" name="profit" id="notTaxed" onclick="profitQuery()"> No
+    <br>
+    <input type="checkbox" id="itc"> ITC: % of total discounted:
+    <input type="number" id="itcPercent" value="30">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Solar Investment Tax Credit (up to 30% in 2018) </span></div>
+    <br>
+    <input type="checkbox" id="state"> State: $/Watt
+    <input type="number" id="statePercent" value="0"> Maximum: $
+    <input type="number" id="stateMax" value="6000">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Oregon State Incentive (Default: $0/watt)</span></div>
+    <br>
+    <input type="checkbox" id="macrs" > Qualifies for MACRS?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Qualifies for 5-year MACRS?</span></div><br>
+    <input type="checkbox" id="utility"> Utility: $/Watt
+    <input type="number" id="utilityFlat" value="0.375"> Maximum: $
+    <input type="number" id="utilityMax" value="40000">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Energy Trust of Oregon (Default: $0.55/watt)</span></div>
+    <br>
+    <input type="checkbox" id="percent"> Misc: % of total discounted:
+    <input type="number" id="miscPercent" value="0">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: percent of initial cost discounted</span></div>
+    <br>
+    <input type="checkbox" id="flat">Misc: Flat fee discounted: $
+    <input type="number" id="miscFlat" value="0">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: flat fee discounted</span></div>
+  <br><br><br></div>
+    <button class="accordion">Discount Rate and Go!</button>
+<div class="panel">
+    <br><br><br><br><br>Discount Rate:
+    <input type="number" id="discountRate" value="10">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The discount rate reflects the time value of money. To see what solar companies would show you on a solar bid, set discount rate equal to 0%. To reflect only inflation, set the the discount rate to 2.5%</span></div>
+    <br><br><br><br><br><br>
+    </div>
+    <button class="accordion">Outputs</button>
+<div class="panel">
+    <br> Year One Utility Bill Savings
+    <br>
+    <table style="width:50%">
+      <tr>
+        <th>Month</th>
+        <th>Savings</th>
+      </tr>
+      <tr>
+        <td>January</td>
+        <td id="jan">$</td>
+      </tr>
+      <tr>
+        <td>Febuary</td>
+        <td id="feb">$</td>
+      </tr>
+      <tr>
+        <td>March</td>
+        <td id="mar">$</td>
+      </tr>
+      <tr>
+        <td>April</td>
+        <td id="apr">$</td>
+      </tr>
+      <tr>
+        <td>May</td>
+        <td id="may">$</td>
+      </tr>
+      <tr>
+        <td>June</td>
+        <td id="jun">$</td>
+      </tr>
+      <tr>
+        <td>July</td>
+        <td id="jul">$</td>
+      </tr>
+      <tr>
+        <td>August</td>
+        <td id="aug">$</td>
+      </tr>
+      <tr>
+        <td>September</td>
+        <td id="sep">$</td>
+      </tr>
+      <tr>
+        <td>October</td>
+        <td id="oct">$</td>
+      </tr>
+      <tr>
+        <td>November</td>
+        <td id="nov">$</td>
+      </tr>
+      <tr>
+        <td>December</td>
+        <td id="dec">$</td>
+      </tr>
+    </table>
+    <br>First Year Savings: $
+    <input id='outSave' size='3' readonly></input><br>
+    <br>Incentives Tax Credit Amount: $<input id='Tax' size='3' readonly></input>    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The amount saved through tax incentives. If the customer is not able to utilize these tax savings then the simulation should be rerun with less incentives selected.</span></div>
+    <br><br> Return On Investment:
+    <input id='outROI' size='3' readonly></input> %
+    <br><br> Net Present Value: $
+    <input id='outPay' size='3' readonly></input><br><br>
+    Payback Period (Years): <input id='payback' size='11' readonly></input>
+    <br><br> CO2 Offset: <input id='outCO2' size='3' readonly></input> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div>
+    </div>
+<br>
+<br>
+<button onclick="run();">   Run Simulation   </button>
+  <script id="jsbin-javascript">
+function run() {
+  // Total generation for CO2 offset. Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.
+  var cO2generation = [1124, 1283, 2507, 2622, 3140, 3112, 3488, 3293, 2819, 1965, 1092, 994];//Kwh
+  //Initialize Variables
+    var generation, numberOfPanels, installationCosts, inverterReplacement, i, fixedCostsSavings,iBatteryCosts;
+  var itcMacrsOffset = 1;
+  var macrs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var batteryCosts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var panelEfficiancyLosses = [0, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015]; 
+  //Pull battery information
+  var batteryCost = document.getElementById("batteryCost").value;
+  var numberOfBatteries = document.getElementById("numberBatteries").value;
+  var totalBatteryCost = batteryCost * numberOfBatteries;
+  //Choose storage option
+  switch (getCheckedRadioValue("storageOption")) {
+    case "none":
+      generation = [1124, 1283, 2507, 2622, 3140, 3112, 3488, 3293, 2819, 1965, 1092, 994];
+      numberOfPanels = 62;
+      installationCosts = 30167;
+      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 4500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      fixedCostsSavings = [15,15,27,21,23,21,22,29,25,17,13,14];
+      iBatteryCosts = 0;
+      break;
+    case "TOU":
+      generation = [107,117,217,216,260,250,286,295,273,174,103,99];
+        //Warranty good for 5 years
+      iBatteryCosts = totalBatteryCost+5100+ 11693;
+      batteryCosts[9] = totalBatteryCost;
+      numberOfPanels = 62;
+      installationCosts = 30167;
+      inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 9600, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];//9600
+      fixedCostsSavings = [36,35,48,42,47,40,46,49,50,43,34,34];
+      break;
+    
+  }
+  //Read in power cost and determine monthly savings
+  var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  var costPerKWh = document.getElementById("energyCost2").value;
+  for (i = 0; i < 12; i++) {
+    var monthlySavings = (generation[i] * costPerKWh) + fixedCostsSavings[i];
+    var num = monthlySavings.toString();
+    var output = "$" + parseFloat(num).toFixed(2);
+    document.getElementById(months[i]).innerHTML = output;
+  }
+  //Calculate year one savings
+  var sumGen = generation.reduce(getSum);
+  var yearOneSaving = +(sumGen * costPerKWh) + fixedCostsSavings.reduce(getSum);
+  document.getElementById("outSave").value = yearOneSaving.toFixed(2);
+  //read in incentives
+  var itc = 0.0,state = 0.0,utility = 0.0,percent = 0.0,flat = 0.0;
+  if (document.getElementById("taxed").checked === true) {
+    if (document.getElementById("itc").checked === true) {
+      itc = document.getElementById("itcPercent").value;
+    }
+    var stateMax = document.getElementById("stateMax").value;
+    if (document.getElementById("state").checked === true) {
+      var costWatt = document.getElementById("statePercent").value;
+      var subCost = costWatt * 17700;
+      if (subCost <stateMax){
+      	state = subCost;
+      }
+      else {
+      	state = stateMax;
+      }
+    }
+    if (document.getElementById("macrs").checked === true) {
+      macrs = [0.2, 0.32, 0.192, 0.1152, 0.1152, 0.0576, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      if (document.getElementById("itc").checked === true) {
+      itcMacrsOffset = 0.85; //Since only half of the ITC credit applies to MACRS
+      }
+    }
+  }
+  var utilityMax = document.getElementById("utilityMax").value;
+  if (document.getElementById("utility").checked === true) {
+    var costWattU = document.getElementById("utilityFlat").value;
+      var subCostU = costWattU * 17700;
+      if (subCostU <utilityMax){
+      	utility = subCostU;
+      }
+      else {
+      	utility = utilityMax;
+      }
+  }
+  if (document.getElementById("percent").checked === true) {
+    percent = document.getElementById("miscPercent").value;
+
+  }
+  if (document.getElementById("flat").checked === true) {
+    flat = document.getElementById("miscFlat").value;
+
+  }
+  // Cost calculations
+  var panelCost = document.getElementById("panelCost").value;
+  var totalCost = (panelCost * numberOfPanels) + installationCosts;
+  var incentiveSavings = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var utilitySavings= totalCost - parseFloat(utility);
+  var stateSavings = utilitySavings -  parseFloat(state);
+  incentiveSavings[0] =+ parseFloat(stateSavings * (itc / 100)) + parseFloat(flat) + (stateSavings * parseFloat(percent / 100)) + parseFloat(state) + parseFloat(utility);
+  var systemLength = 19; //20 years starting at zero
+  var yearlyGeneration = generation.reduce(getSum); //sum of generation array
+  var generationArray = [],macrsSavings = [],yearlySavings = [];
+  // Determine cost and savings over the lifetime of the array
+  for (i = 0; i < systemLength + 1; i++) {
+    yearlyGeneration = yearlyGeneration - (yearlyGeneration * panelEfficiancyLosses[i]);
+    generationArray[i] = yearlyGeneration;
+    macrsSavings[i] = totalCost * itcMacrsOffset * macrs[i];
+    yearlySavings[i] = ((generationArray[i] * costPerKWh) +fixedCostsSavings.reduce(getSum));
+  }
+  // Determining present value
+  var discountRate = document.getElementById("discountRate").value / 100;
+  var cumulativeCF = [],npvSavings = 0,npvCost = 0,pVF,k,payback,done=false;
+  cumulativeCF[0] = -(totalCost+iBatteryCosts);
+  npvCost = totalCost+iBatteryCosts;
+  var discountCF = -(totalCost+iBatteryCosts);
+  var totalTaxSavings = incentiveSavings[0];
+  for (var n = 0; n < 20; n++) {
+    // Present value factor
+    pVF = 1 / Math.pow(1 + discountRate, n+1);
+    cumulativeCF[n + 1] = +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - ((batteryCosts[n]) * pVF) - (inverterReplacement[n] * pVF);//cumulative cash flow
+    npvCost = +npvCost + (batteryCosts[n] * pVF) + (inverterReplacement[n] * pVF);//present value of costs
+    k = cumulativeCF.reduce(getSum);
+    discountCF= discountCF +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - ((batteryCosts[n]) * pVF) - (inverterReplacement[n] * pVF);//current cash flow
+    npvSavings = parseFloat(npvSavings) + ((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF);//present value of savings
+    totalTaxSavings = totalTaxSavings + (macrsSavings[n] * pVF);//total Tax credit
+    //payback loop
+    if(k >=0){
+      if(done) break;//breaks loop once cashflow become positive
+       payback = n + (discountCF/npvSavings);
+       payback = payback.toFixed(2);
+      done = true;
+    }
+    else{
+      payback = "Never Pays Back";
+    }
+  }
+  //Total Tax Incentives
+  document.getElementById("Tax").value = totalTaxSavings.toFixed(2);
+  // ROI & NPV
+  var returnOnInvestment = (cumulativeCF.reduce(getSum) / (npvCost)) * 100;
+  document.getElementById("outROI").value = returnOnInvestment.toFixed(2);
+  var nPV = cumulativeCF.reduce(getSum);
+  document.getElementById("outPay").value = nPV.toFixed(2);
+  //Payback
+  document.getElementById("payback").value = payback;
+  //CO2 offset
+  var co2Offset = 0.000744 * cO2generation.reduce(getSum); //metric tons co2/kWh
+  document.getElementById("outCO2").value = co2Offset.toFixed(2);
+}
+
+  //Debugging and verification (ignore please)
+  //alert(payback)
+  //alert(totalCost+iBatteryCosts)
+  //alert(batteryCosts[9]+inverterReplacement[9])
+  //alert(npvSavings)
+  //alert(npvCost)
+
+//gets the value of the checked radio button
+function getCheckedRadioValue(name) {
+  var elements = document.getElementsByName(name);
+
+  for (var i = 0, len = elements.length; i < len; ++i)
+    if (elements[i].checked) return elements[i].value;
+}
+
+function storageQuery() {
+  switch (getCheckedRadioValue("storageOption")) {
+    case "none":
+      document.getElementById("batteryCost").value = 0;
+      document.getElementById("numberBatteries").value = 0;
+      document.getElementById("energyCost1").value = 0.0628;
+      document.getElementById("energyCost2").value = 0.06119;
+      document.getElementById("energyCost1").hidden = false;
+      document.getElementById("energyCost2").hidden = false;
+      break;
+    case "TOU":
+      document.getElementById("batteryCost").value = 9610;
+      document.getElementById("numberBatteries").value = 6;
+      document.getElementById("energyCost1").value = 0;
+      document.getElementById("energyCost2").value = 1;
+      document.getElementById("energyCost1").hidden = true;
+      document.getElementById("energyCost2").hidden = true;
+      break;
+    default:
+      alert("Error!");
+  }
+}
+
+//Will disable or enable tax only incentives
+function profitQuery() {
+  if (document.getElementById("taxed").checked === true) {
+    document.getElementById("itc").hidden = false;
+    document.getElementById("itcPercent").value = 30;
+    document.getElementById("itcPercent").readOnly = false;
+    document.getElementById("state").hidden = false;
+    document.getElementById("statePercent").value = 0;
+    document.getElementById("statePercent").readOnly = false;
+    document.getElementById("macrs").hidden = false;
+
+  } else if (document.getElementById("taxed").checked === false) {
+    document.getElementById("itc").hidden = true;
+    document.getElementById("itc").checked = false;
+    document.getElementById("itcPercent").value = 0;
+    document.getElementById("itcPercent").readOnly = true;
+    document.getElementById("state").hidden = true;
+    document.getElementById("state").checked = false;
+    document.getElementById("statePercent").value = 0;
+    document.getElementById("statePercent").readOnly = true;
+    document.getElementById("macrs").hidden = true;
+    document.getElementById("macrs").checked = false;
+  }
+
+}
+
+function getSum(total, num) {
+  return total + num;
+}
+
+var acc = document.getElementsByClassName("accordion");
+var l;
+
+for (l = 0; l < acc.length; l++) {
+  acc[l].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight){
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+</body>
+
+</html>
