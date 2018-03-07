@@ -5,14 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Small Business</title>
-    <link rel="stylesheet" type="text/css" href="small.css">
+    <link rel="stylesheet" type="text/css" href="All.css">
     <script type="text/javascript" src="small.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
   </head>
 
   <body>
     <a href="index.html">Return to the Homepage</a><br><br>
     <button class="accordion">System Information</button>
-<div class="panel"><br>
+<div class="panel"><br><br><br><br><br>
      Price per Panel:
     $
     <input type="number" id="panelCost" value="230">
@@ -25,18 +28,17 @@
   <span class="tooltiptext">Time of use pricing is a way for the utility to charge different prices for electricity during times of high energy demand. A time of use battery bank is designed to mitigate these higher prices by charging during low price times and discharging during high price times.</span></div>
     <br>
     <br>
-     Cost per battery ($):
-    $
+     Cost per battery: $
     <input type="number" id="batteryCost" value="0">    <div class="tooltip">&#x2754;
   <span class="tooltiptext">(Fronius 10.5 kWh solar battery). In order to input an average cost per kWh of battery storage rather than the specific battery cost, take the average cost per kwh obtained and multiply it by 10.5 . The battery used for the analysis was an 10.5 kwh battery. Using this factor allows the end user to input a average $/kWh while keeping the same system parameters. </span></div><br><br>
-     Number of Batteries: <input type="number" id="numberBatteries" value="0" readonly><br>
+     Number of Batteries: <input type="number" id="numberBatteries" value="0" readonly><br><br><br><br><br><br>
 </div>
     <button class="accordion">Rate Schedule and Incentives</button>
 <div class="panel">
-     <br>Cost per kWh Tier 1: $
+     <br><br>Cost per kWh Tier 1: $
     <input type="number" id="energyCost1" value="0.0628">    <div class="tooltip">&#x2754;
   <span class="tooltiptext">Effective Cost per kWh, Pacific Power Schedule 28 primary for Bend, OR.</span></div>
-    <br>Cost per kWh Tier 2:$
+    <br>Cost per kWh Tier 2: $
     <input type="number" id="energyCost2" value="0.06119">
     <br>
     <br> Eligible for Tax Incentives?    <div class="tooltip">&#x2754;
@@ -69,20 +71,17 @@
     <input type="checkbox" id="flat">Misc: Flat fee discounted: $
     <input type="number" id="miscFlat" value="0">    <div class="tooltip">&#x2754;
   <span class="tooltiptext">Miscellaneous: flat fee discounted</span></div>
-  <br></div>
-    <button class="accordion">Discount Rate and Go!</button>
+  <br><br><br></div>
+    <button class="accordion">Discount Rate</button>
 <div class="panel">
-    <br>Discount Rate:
+    <br><br><br><br><br>Discount Rate:
     <input type="number" id="discountRate" value="10">%    <div class="tooltip">&#x2754;
   <span class="tooltiptext">The discount rate reflects the time value of money. To see what solar companies would show you on a solar bid, set discount rate equal to 0%. To reflect only inflation, set the the discount rate to 2.5%</span></div>
-    <br>
-    <br>
-    <button onclick="run();">Go!</button>
-    <br>
+    <br><br><br><br><br><br>
     </div>
     <button class="accordion">Outputs</button>
 <div class="panel">
-    <br> Utility Bill Savings
+    <br> Year One Utility Bill Savings
     <br>
     <table style="width:50%">
       <tr>
@@ -139,20 +138,48 @@
       </tr>
     </table>
     <br>First Year Savings: $
-    <textarea id='outSave' cols="8" rows="1" readonly></textarea>
-    <br>Incentives Tax Credit Amount: $<textarea id='Tax' cols="8" rows="1" readonly></textarea>    <div class="tooltip">&#x2754;
+    <input id='outSave' size='5' readonly></input><br>
+    <br>Incentives Tax Credit Amount: $<input id='Tax' size='5' readonly></input>    <div class="tooltip">&#x2754;
   <span class="tooltiptext">The amount saved through tax incentives. If the customer is not able to utilize these tax savings then the simulation should be rerun with less incentives selected.</span></div>
-    <br> Return On Investment:
-    <textarea id='outROI' cols="7" rows="1" readonly></textarea> %
-    <br> Net Present Value: $
-    <textarea id='outPay' cols="9" rows="1" readonly></textarea><br>
-    Payback Period (Years): <textarea id='payback' cols="20" rows="1" readonly></textarea>
-    <br> CO2 Offset: <textarea id='outCO2' cols="6" rows="1" readonly></textarea> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
-  <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div>
-    <IMG SRC="http://media3.giphy.com/media/SnBaZPL1Tjnfa/giphy.gif"></IMG><div class="tooltip">&#x2754;
-  <span class="tooltiptext">A dancing Polar Bear (duh).</span></div>
+    <br><br>Total System Cost: $<input id='system1' size='5' readonly><br>
+    <br>System Cost less Incentives: $<input id='system2' size='5' readonly>
+    <br><br> Return On Investment:
+    <input id='outROI' size='5' readonly></input> %
+    <br><br> Net Present Value: $
+    <input id='outPay' size='5' readonly></input><br><br>
+    Payback Period (Years): <input id='payback' size='11' readonly></input>
+    <br><br> CO2 Offset: <input id='outCO2' size='5' readonly></input> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div><br><br><br><br>
     </div>
+<br>
+<button onclick="run();" class="button">   Run Simulation   </button>
 
+
+<style>
+    .panel {
+      padding: 0 18px;
+      background-color: #c2d6d6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+  </style>
+
+  <script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+  </script>
   </body>
 
 </html>

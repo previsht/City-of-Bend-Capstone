@@ -3,15 +3,13 @@ function run() {
   //alert(loadProfile.reduce(getSum))
   //Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.
   //numbers are in kilowatt hours per month
-  var itcMacrsOffset = 1;
+  var itcMacrsOffset = 1,batteryCosts=0;
   var macrs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  //var batteryCosts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; //Is an array of zeroes the length of systemLife
-  var panelEfficiancyLosses = [0, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015]; //Is an array the length of systemLife
-  //pull battery costs
+  var panelEfficiancyLosses = [0, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015];
     var generation, numberOfPanels, installationCosts, inverterReplacement, i;
       generation = [6426, 8017, 12661, 14026, 15994, 16243, 17965, 17123, 15781, 10663, 5639, 4799];
       numberOfPanels = 321;
-      installationCosts = 122895;
+      installationCosts = 155825;
       inverterReplacement = [0, 0, 0, 0, 0, 0, 0, 0, 0, 21456, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   //Read in Power Cost and generation
   var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
@@ -30,61 +28,53 @@ function run() {
 
 
 
-  //Incentives
-  var itc = 0.0,
-    state = 0.0,
-    utility = 0.0,
-    percent = 0.0,
-    flat = 0.0;
-
+   //Incentives
+  var itc = 0.0,    state = 0.0,    utility = 0.0,    percent = 0.0,    flat = 0.0;
   if (document.getElementById("taxed").checked === true) {
-
     if (document.getElementById("itc").checked === true) {
       itc = document.getElementById("itcPercent").value;
-
     }
+    var stateMax = document.getElementById("stateMax").value;
     if (document.getElementById("state").checked === true) {
       var costWatt = document.getElementById("statePercent").value;
       var subCost = costWatt * 91450;
-      if (subCost <6000){
+      if (subCost <stateMax){
       	state = subCost;
       }
       else {
-      	state = 6000;
+      	state = stateMax;
       }
     }
     if (document.getElementById("macrs").checked === true) {
       macrs = [0.2, 0.32, 0.192, 0.1152, 0.1152, 0.0576, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       itcMacrsOffset = 0.85; //Since only half of the ITC credit applies to MACRS
-
     }
-
   }
+  var utilityMax = document.getElementById("utilityMax").value;
   if (document.getElementById("utility").checked === true) {
-   var costWattU = document.getElementById("utilityFlat").value;
+    var costWattU = document.getElementById("utilityFlat").value;
       var subCostU = costWattU * 91450;
-      if (subCostU <40000){
+      if (subCostU <utilityMax){
       	utility = subCostU;
       }
       else {
-      	utility = 40000;
+      	utility = utilityMax;
       }
   }
   if (document.getElementById("percent").checked === true) {
     percent = document.getElementById("miscPercent").value;
-
   }
   if (document.getElementById("flat").checked === true) {
     flat = document.getElementById("miscFlat").value;
-
   }
-
   // Cost calculations
   var panelCost = document.getElementById("panelCost").value;
   var totalCost = (panelCost * numberOfPanels) + installationCosts;
   var incentiveSavings = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  incentiveSavings[0] =+ (totalCost * (itc / 100)) + state + utility + parseFloat(flat) + (totalCost * (percent / 100));
-  //alert(incentiveSavings)
+  var utilitySavings= totalCost - parseFloat(utility);
+  var stateSavings = utilitySavings -  parseFloat(state);
+  incentiveSavings[0] =+ parseFloat(stateSavings * (itc / 100)) + parseFloat(flat) + (stateSavings * parseFloat(percent / 100)) + parseFloat(state) + parseFloat(utility);
+  var taxIncentive =+ parseFloat(stateSavings * (itc / 100)) + parseFloat(state);
   var systemLength = 19; //20 years starting at zero
   var yearlyGeneration = generation.reduce(getSum); //sum of generation array
   var generationArray = [];
@@ -97,38 +87,49 @@ function run() {
     macrsSavings[i] = totalCost * itcMacrsOffset * macrs[i];
     yearlySavings[i] = generationArray[i] * costPerKWh;
   }
-
   // Determining present value
   var discountRate = document.getElementById("discountRate").value / 100;
-  var cumulativeCF = [];
-  var npvSavings=0;
-  cumulativeCF[0] = -totalCost;
-  var npvCost = [];
+  var cumulativeCF = [],npvSavings = 0,npvCost = 0,pVF,k,payback,done=false;
+  cumulativeCF[0] = -(totalCost);
   npvCost = totalCost;
-  var pVF;//, discountCF;
-  var k = cumulativeCF.reduce(getSum);
-  //alert(cumulativeCF.reduce(getSum))
+  var discountCF = -(totalCost);
+  var totalTaxSavings = taxIncentive;
+  var totalIncentives = incentiveSavings[0];
   for (var n = 0; n < 20; n++) {
     // Present value factor
     pVF = 1 / Math.pow(1 + discountRate, n + 1);
     cumulativeCF[n + 1] = +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - (inverterReplacement[n] * pVF);
-    //discountCF = ((yearlySavings[n] + macrsSavings[n] - batteryCosts[n]) * pVF)
-    npvSavings =+ npvSavings +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF)
-    npvCost = +npvCost + (inverterReplacement[n] * pVF);
+    npvCost = +npvCost  + (inverterReplacement[n] * pVF);
     k = cumulativeCF.reduce(getSum);
+    discountCF= discountCF +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - (inverterReplacement[n] * pVF);//current cash flow
+    npvSavings = parseFloat(npvSavings) + ((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF);//present value of savings
+    totalTaxSavings = totalTaxSavings + (macrsSavings[n] * pVF);//total Tax credit
+    totalIncentives = totalIncentives + (macrsSavings[n] * pVF);
+    //payback loop
+    if(k >=0){
+      if(done) break;//breaks loop once cashflow become positive
+       payback = n + (discountCF/npvSavings);
+       payback = payback.toFixed(2);
+      done = true;
+    }
+    else{
+      payback = "Never Pays Back";
+    }
   }
-  //alert(totalCost+totalBatteryCost)
-  //alert(npvSavings)
-  //alert(npvCost)
+ //Total Tax Incentives
+  document.getElementById("Tax").value = totalTaxSavings.toFixed(2);
   // ROI & NPV
   var returnOnInvestment = (cumulativeCF.reduce(getSum) / (npvCost)) * 100;
-  document.getElementById("outROI").value = returnOnInvestment;
+  document.getElementById("outROI").value = returnOnInvestment.toFixed(2);
   var nPV = cumulativeCF.reduce(getSum);
-  document.getElementById("outPay").value = nPV;
+  document.getElementById("outPay").value = nPV.toFixed(2);
+  //Payback
+  document.getElementById("payback").value = payback;
   //CO2 offset
-  var co2Offset = 0.000744 * yearlyGeneration; //metric tons co2/kWh
-  document.getElementById("outCO2").value = co2Offset;
-  //alert('bye')
+  var co2Offset = 0.000744 * generation.reduce(getSum); //metric tons co2/kWh
+  document.getElementById("outCO2").value = co2Offset.toFixed(2);
+  document.getElementById("system1").value = parseFloat(totalCost);
+  document.getElementById("system2").value = (parseFloat(totalCost) -totalIncentives).toFixed(2);
 }
 
 //gets the value of the checked radio button
@@ -139,24 +140,7 @@ function getCheckedRadioValue(name) {
     if (elements[i].checked) return elements[i].value;
 }
 
-function storageQuery() {
-  switch (getCheckedRadioValue("storageOption")) {
-    case "none":
-      document.getElementById("batteryCost").value = 0;
-      document.getElementById("numberBatteries").value = 0;
-      break;
-    case "backup":
-      document.getElementById("batteryCost").value = 316;
-      document.getElementById("numberBatteries").value = 16;
-      break;
-    case "netZero":
-      document.getElementById("batteryCost").value = 1745;
-      document.getElementById("numberBatteries").value = 27;
-      break;
-    default:
-      alert("Error!");
-  }
-}
+
 
 //Will disable or enable tax only incentives
 function profitQuery() {

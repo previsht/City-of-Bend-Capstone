@@ -5,48 +5,69 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Multi-Family Housing</title>
-    <link rel="stylesheet" type="text/css" href="MFH.css">
+    <link rel="stylesheet" type="text/css" href="All.css">
     <script type="text/javascript" src="MFH.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
   </head>
 
   <body>
-    <a href="index.html">Return to the Homepage</a>
-    <p> Price per Panel ($):</p>
-    $
+    <a href="index.html">Return to the Homepage</a><br><br>
+    <button class="accordion">System Information</button>
+<div class="panel"><br><br>
+     Price per Panel: $
     <input type="number" id="panelCost" value="230">
+    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">SolarWorld 285 mono black</span></div><br><br><br></div>
+
+    <button class="accordion">Rate Schedule and Incentives</button>
+<div class="panel">
+     <br><br>Cost per kWh: $
+    <input type="number" id="energyCost" value="0.1047">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Effective Cost per kWh, Pacific Power Schedule 4 for Bend, OR.</span></div>
     <br>
-    <p> Cost per kWh ($):</p>
-    $
-    <input type="number" id="energyCost" value="0.1047">
-    <br>
-    <br> For Profit?
+    <br> Eligible for Tax Incentives?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Non-profit owners of rooftop solar do not qualify for tax breaks without a PPA that is beyond the scope of this tool. Select whether or not this analysis qualifies for tax incentives, then select corresponding incentives.
+</span></div>
     <br>
     <input type="radio" name="profit" id="taxed" checked onclick="profitQuery()"> Yes
     <input type="radio" name="profit" id="notTaxed" onclick="profitQuery()"> No
     <br>
     <input type="checkbox" id="itc"> ITC: % of total discounted:
-    <input type="number" id="itcPercent" value="30">%
+    <input type="number" id="itcPercent" value="30">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Solar Investment Tax Credit (up to 30% in 2018) </span></div>
     <br>
     <input type="checkbox" id="state"> State: $/Watt
-    <input type="number" id="statePercent" value="0">
+    <input type="number" id="statePercent" value="0"> Maximum: $
+    <input type="number" id="stateMax" value="6000">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Oregon State Incentive (Default: $0/watt)</span></div>
     <br>
-    <input type="checkbox" id="macrs">Qualifies for MACRS?<br>
+    <input type="checkbox" id="macrs" >Qualifies for MACRS?    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Qualifies for 5-year MACRS?</span></div><br>
     <input type="checkbox" id="utility"> Utility: $/Watt
-    <input type="number" id="utilityFlat" value="0.35">
+    <input type="number" id="utilityFlat" value="0.55"> Maximum: $
+    <input type="number" id="utilityMax" value="4400">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Energy Trust of Oregon (Default: $0.55/watt)</span></div>
     <br>
     <input type="checkbox" id="percent"> Misc: % of total discounted:
-    <input type="number" id="miscPercent" value="0">%
+    <input type="number" id="miscPercent" value="0">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: percent of initial cost discounted</span></div>
     <br>
     <input type="checkbox" id="flat">Misc: Flat fee discounted: $
-    <input type="number" id="miscFlat" value="0">
-
-    <p> Discount Rate:</p>
-    <input type="number" id="discountRate" value="10">%
-    <br>
-    <br>
-    <button onclick="run()">Run</button>
-    <br>
-    <br> Utility Bill Offset
+    <input type="number" id="miscFlat" value="0">    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Miscellaneous: flat fee discounted</span></div>
+  <br><br><br></div>
+    <button class="accordion">Discount Rate</button>
+<div class="panel">
+    <br><br><br><br><br>Discount Rate:
+    <input type="number" id="discountRate" value="10">%    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The discount rate reflects the time value of money. To see what solar companies would show you on a solar bid, set discount rate equal to 0%. To reflect only inflation, set the the discount rate to 2.5%</span></div>
+    <br><br><br><br><br><br>
+    </div>
+    <button class="accordion">Outputs</button>
+<div class="panel">
+    <br> Year One Utility Bill Savings
     <br>
     <table style="width:50%">
       <tr>
@@ -102,20 +123,49 @@
         <td id="dec">$</td>
       </tr>
     </table>
-    <br> Yearly Savings:
-    <br> $
-    <textarea id='outSave' cols="6" rows="1" readonly></textarea>
-    <br> ROI:
-    <br>
-    <textarea id='outROI' cols="7" rows="1" readonly></textarea> %
-    <br> NPV
-    <br>$
-    <textarea id='outPay' cols="9" rows="1" readonly></textarea>
-    <br> CO2 Offset
-    <br>
-    <textarea id='outCO2' cols="6" rows="1" readonly></textarea> metric tons of CO2 offset each year.
-    <IMG SRC="http://media3.giphy.com/media/SnBaZPL1Tjnfa/giphy.gif"></IMG>
+    <br>First Year Savings: $
+    <input id='outSave' size='5' readonly></input><br>
+    <br>Incentives Tax Credit Amount: $<input id='Tax' size='5' readonly></input>    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">The amount saved through tax incentives. If the customer is not able to utilize these tax savings then the simulation should be rerun with less incentives selected.</span></div>
+    <br><br>Total System Cost: $<input id='system1' size='5' readonly><br>
+    <br>System Cost less Incentives: $<input id='system2' size='5' readonly>
+    <br><br> Return On Investment:
+    <input id='outROI' size='5' readonly></input> %
+    <br><br> Net Present Value: $
+    <input id='outPay' size='5' readonly></input><br><br>
+    Payback Period (Years): <input id='payback' size='11' readonly></input>
+    <br><br> CO2 Offset: <input id='outCO2' size='5' readonly></input> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
+  <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div><br><br><br><br>
+    </div>
+<br>
+<button onclick="run();" class="button">   Run Simulation   </button>
 
+
+<style>
+    .panel {
+      padding: 0 18px;
+      background-color: #c2d6d6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+  </style>
+
+  <script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+  </script>
   </body>
 
 </html>

@@ -2,7 +2,7 @@ function run() {
   // Total generation for CO2 offset. Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.
   var cO2generation = [1124, 1283, 2507, 2622, 3140, 3112, 3488, 3293, 2819, 1965, 1092, 994];//Kwh
   //Initialize Variables
-    var generation, numberOfPanels, installationCosts, inverterReplacement, i, fixedCostsSavings,iBatteryCosts;
+  var generation, numberOfPanels, installationCosts, inverterReplacement, i, fixedCostsSavings,iBatteryCosts;
   var itcMacrsOffset = 1;
   var macrs = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   var batteryCosts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -23,8 +23,7 @@ function run() {
       break;
     case "TOU":
       generation = [107,117,217,216,260,250,286,295,273,174,103,99];
-        //Warranty good for 5 years
-      iBatteryCosts = totalBatteryCost+5100+ 11693;
+      iBatteryCosts = totalBatteryCost + 5100 + 11693;
       batteryCosts[9] = totalBatteryCost;
       numberOfPanels = 62;
       installationCosts = 30167;
@@ -45,7 +44,7 @@ function run() {
   //Calculate year one savings
   var sumGen = generation.reduce(getSum);
   var yearOneSaving = +(sumGen * costPerKWh) + fixedCostsSavings.reduce(getSum);
-  document.getElementById("outSave").value = yearOneSaving;
+  document.getElementById("outSave").value = yearOneSaving.toFixed(2);
   //read in incentives
   var itc = 0.0,state = 0.0,utility = 0.0,percent = 0.0,flat = 0.0;
   if (document.getElementById("taxed").checked === true) {
@@ -93,7 +92,10 @@ function run() {
   var panelCost = document.getElementById("panelCost").value;
   var totalCost = (panelCost * numberOfPanels) + installationCosts;
   var incentiveSavings = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  incentiveSavings[0] =+ parseFloat(totalCost * (itc / 100)) + parseFloat(state) + parseFloat(utility) + parseFloat(flat) + (totalCost * parseFloat(percent / 100));
+  var utilitySavings= totalCost - parseFloat(utility);
+  var stateSavings = utilitySavings -  parseFloat(state);
+  incentiveSavings[0] =+ parseFloat(stateSavings * (itc / 100)) + parseFloat(flat) + (stateSavings * parseFloat(percent / 100)) + parseFloat(state) + parseFloat(utility);
+  var taxIncentive =+ parseFloat(stateSavings * (itc / 100)) + parseFloat(state);
   var systemLength = 19; //20 years starting at zero
   var yearlyGeneration = generation.reduce(getSum); //sum of generation array
   var generationArray = [],macrsSavings = [],yearlySavings = [];
@@ -110,7 +112,8 @@ function run() {
   cumulativeCF[0] = -(totalCost+iBatteryCosts);
   npvCost = totalCost+iBatteryCosts;
   var discountCF = -(totalCost+iBatteryCosts);
-  var totalTaxSavings = incentiveSavings[0];
+  var totalTaxSavings = taxIncentive;
+  var totalIncentives = incentiveSavings[0];
   for (var n = 0; n < 20; n++) {
     // Present value factor
     pVF = 1 / Math.pow(1 + discountRate, n+1);
@@ -120,10 +123,12 @@ function run() {
     discountCF= discountCF +((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF) - ((batteryCosts[n]) * pVF) - (inverterReplacement[n] * pVF);//current cash flow
     npvSavings = parseFloat(npvSavings) + ((yearlySavings[n] + macrsSavings[n] + incentiveSavings[n]) * pVF);//present value of savings
     totalTaxSavings = totalTaxSavings + (macrsSavings[n] * pVF);//total Tax credit
+    totalIncentives = totalIncentives + (macrsSavings[n] * pVF);
     //payback loop
     if(k >=0){
       if(done) break;//breaks loop once cashflow become positive
        payback = n + (discountCF/npvSavings);
+       payback = payback.toFixed(2);
       done = true;
     }
     else{
@@ -131,17 +136,20 @@ function run() {
     }
   }
   //Total Tax Incentives
-  document.getElementById("Tax").value = totalTaxSavings;
+  document.getElementById("Tax").value = totalTaxSavings.toFixed(2);
   // ROI & NPV
   var returnOnInvestment = (cumulativeCF.reduce(getSum) / (npvCost)) * 100;
-  document.getElementById("outROI").value = returnOnInvestment;
+  document.getElementById("outROI").value = returnOnInvestment.toFixed(2);
   var nPV = cumulativeCF.reduce(getSum);
-  document.getElementById("outPay").value = nPV;
+  document.getElementById("outPay").value = nPV.toFixed(2);
   //Payback
   document.getElementById("payback").value = payback;
   //CO2 offset
   var co2Offset = 0.000744 * cO2generation.reduce(getSum); //metric tons co2/kWh
-  document.getElementById("outCO2").value = co2Offset;
+  document.getElementById("outCO2").value = co2Offset.toFixed(2);
+  document.getElementById("system1").value = parseFloat(totalCost+iBatteryCosts);
+  document.getElementById("system2").value = (parseFloat(totalCost+iBatteryCosts) -totalIncentives).toFixed(2);
+  
 }
 
   //Debugging and verification (ignore please)
@@ -212,17 +220,3 @@ function getSum(total, num) {
   return total + num;
 }
 
-var acc = document.getElementsByClassName("accordion");
-var l;
-
-for (l = 0; l < acc.length; l++) {
-  acc[l].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var panel = this.nextElementSibling;
-    if (panel.style.maxHeight){
-      panel.style.maxHeight = null;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-    } 
-  });
-}
