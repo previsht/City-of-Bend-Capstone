@@ -13,7 +13,7 @@ td {
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    width: 360px;
+    width: 500px;
     background-color: grey;
     color: #fff;
     text-align: center;
@@ -74,9 +74,10 @@ td {
     content: "\2212";
 }
 .button {
-    float:right;
+    float:left;
     background-color: #94b8b8; /* Green */
-    border: none;
+    border: solid;
+    border-color: white;
     color: black;
     font-weight: bold;
     padding: 10px 20px;
@@ -87,4 +88,13 @@ td {
 }
 .button:hover{
   background-color: #b3cccc;
+}
+body{
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/Solar_panels_on_a_roof.jpg);
+}
+
+.input[type="number"]{
+  float:right;
+  margin-left: 200px;
+  margin-right: 700px;
 }
