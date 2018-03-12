@@ -29,7 +29,7 @@
     <br>
     <br>
      Cost per battery: $
-    <input type="number" id="batteryCost" value="0">    <div class="tooltip">&#x2754;
+    <input type="number" id="batteryCost" value="0" readOnly>    <div class="tooltip">&#x2754;
   <span class="tooltiptext">Fronius 10.5 kWh solar battery </span></div><br><br>
      Number of Batteries: <input type="number" id="numberBatteries" value="0" readonly><br><br><br>
 </div>
@@ -58,7 +58,7 @@
   <span class="tooltiptext">Oregon State Incentive (Default: $0/watt)</span></div>
     <br>
     <input type="checkbox" id="macrs" > Qualifies for MACRS   <div class="tooltip">&#x2754;
-  <span class="tooltiptext">Qualifies for 5-year MACRS?</span></div><br>
+  <span class="tooltiptext">Modified Accelerated Cost Recovery System (5-year depreciation)</span></div><br>
     <input type="checkbox" id="utility"> Utility: $/Watt
     <input type="number" id="utilityFlat" value="0.375"> Maximum: $
     <input type="number" id="utilityMax" value="40000">    <div class="tooltip">&#x2754;
@@ -137,18 +137,18 @@
         <td id="dec">$</td>
       </tr>
     </table>
-    <br>First Year Savings: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    $<input id='outSave' size='5' readonly></input><br>
-    <br>Incentives Tax Credit Amount: $<input id='Tax' size='5' readonly></input>    <div class="tooltip">&#x2754;
+    <br>First Year Savings: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$
+    <input id='outSave'  readonly></input><br>
+    <br>Incentives Tax Credit Amount: $<input id='Tax'  readonly></input>    <div class="tooltip">&#x2754;
   <span class="tooltiptext">The amount saved through tax incentives. If the customer is not able to utilize these tax savings then the simulation should be rerun with less incentives selected.</span></div>
-    <br><br>Total System Cost: &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;$<input id='system1' size='5' readonly><br>
-    <br>System Cost less Incentives: &ensp;&ensp;$<input id='system2' size='5' readonly>
+    <br><br>Unincentivized System Cost: &ensp;&nbsp;$<input id='system1'  readonly><br>
+    <br>System Cost After Incentives: &ensp;$<input id='system2'  readonly>
     <br><br> Return On Investment:&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;
-    <input id='outROI' size='5' readonly></input> %
+    <input id='outROI'  readonly></input> %
     <br><br> Net Present Value: &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$
-    <input id='outPay' size='5' readonly></input><br><br>
-    Payback Period (Years): &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;<input id='payback' size='11' readonly></input>
-    <br><br> CO2 Offset: <input id='outCO2' size='5' readonly></input> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
+    <input id='outPay'  readonly></input><br><br>
+    Payback Period (Years): &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;<input id='payback'  readonly></input>
+    <br><br> CO2 Offset: <input id='outCO2'  size='5' readonly></input> metric tons of CO2 offset each year.    <div class="tooltip">&#x2754;
   <span class="tooltiptext">Amount of CO2 the solar array is offseting from traditional generation sources.</span></div><br><br><br><br>
     </div>
 <br>

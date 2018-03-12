@@ -46,7 +46,7 @@ function run() {
   }
   //Calculate total savings
   var yearOneSaving =((generation2.reduce(getSum) * costPerKWh2)+ (generation1.reduce(getSum) * costPerKWh1) + fixedCostsSavings.reduce(getSum))*4;
-  document.getElementById("outSave").value = yearOneSaving;
+  document.getElementById("outSave").value = yearOneSaving.toFixed(2);
 //read in incentives
   var itc = 0.0,state = 0.0,utility = 0.0,percent = 0.0,flat = 0.0;
   if (document.getElementById("taxed").checked === true) {
@@ -176,6 +176,7 @@ function storageQuery() {
       document.getElementById("energyCost2").value = 0.06119;
       document.getElementById("energyCost1").hidden = false;
       document.getElementById("energyCost2").hidden = false;
+      document.getElementById("batteryCost").readOnly = true;
       break;
     case "TOU":
       document.getElementById("batteryCost").value = 9610;
@@ -184,6 +185,7 @@ function storageQuery() {
       document.getElementById("energyCost2").value = 1;
       document.getElementById("energyCost1").hidden = true;
       document.getElementById("energyCost2").hidden = true;
+      document.getElementById("batteryCost").readOnly = false;
       break;
     default:
       alert("Error!");

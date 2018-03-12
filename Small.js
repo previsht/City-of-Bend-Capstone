@@ -176,6 +176,7 @@ function storageQuery() {
       document.getElementById("energyCost2").value = 0.06119;
       document.getElementById("energyCost1").hidden = false;
       document.getElementById("energyCost2").hidden = false;
+      document.getElementById("batteryCost").readOnly = true;
       break;
     case "TOU":
       document.getElementById("batteryCost").value = 9610;
@@ -184,6 +185,7 @@ function storageQuery() {
       document.getElementById("energyCost2").value = 1;
       document.getElementById("energyCost1").hidden = true;
       document.getElementById("energyCost2").hidden = true;
+      document.getElementById("batteryCost").readOnly = false;
       break;
     default:
       alert("Error!");

@@ -49,7 +49,7 @@ function run() {
 //Calculate year one savings
   var sumGen = generation.reduce(getSum);
   var yearOneSaving = +sumGen * costPerKWh;
-  document.getElementById("outSave").value = yearOneSaving;
+  document.getElementById("outSave").value = yearOneSaving.toFixed(2);
   //Incentives
   var itc = 0.0,    state = 0.0,    utility = 0.0,    percent = 0.0,    flat = 0.0;
   if (document.getElementById("taxed").checked === true) {
@@ -167,14 +167,17 @@ function storageQuery() {
     case "none":
       document.getElementById("batteryCost").value = 0;
       document.getElementById("numberBatteries").value = 0;
+      document.getElementById("batteryCost").readOnly = true;
       break;
     case "backup":
       document.getElementById("batteryCost").value = 316;
       document.getElementById("numberBatteries").value = 16;
+      document.getElementById("batteryCost").readOnly = false;
       break;
     case "netZero":
       document.getElementById("batteryCost").value = 1745;
       document.getElementById("numberBatteries").value = 27;
+      document.getElementById("batteryCost").readOnly = false;
       break;
     default:
       alert("Error!");

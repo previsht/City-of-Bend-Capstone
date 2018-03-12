@@ -20,7 +20,7 @@ function run() {
   //Calculate total savings
   var sumGen = generation.reduce(getSum);
   var yearOneSaving = +sumGen * costPerKWh;
-  document.getElementById("outSave").value = yearOneSaving;
+  document.getElementById("outSave").value = yearOneSaving.toFixed(2);
    //Incentives
   var itc = 0.0,    state = 0.0,    utility = 0.0,    percent = 0.0,    flat = 0.0;
   if (document.getElementById("taxed").checked === true) {
